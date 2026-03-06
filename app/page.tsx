@@ -244,7 +244,16 @@ export default function HomePage() {
           <div className="exploration-track">
             {[...explorations, ...explorations].map((item, index) => (
               <article key={`${item}-${index}`} className="exploration-card">
-                <video autoPlay loop muted playsInline />
+                {index % explorations.length === 0 ? (
+                  <img
+                    src="/explorations/Goku%20Rive.gif"
+                    alt="Animated character exploration"
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <video autoPlay loop muted playsInline />
+                )}
               </article>
             ))}
           </div>
