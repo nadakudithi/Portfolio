@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { type CSSProperties, useRef } from 'react';
 import { caseStudies, type CaseStudy } from '@/app/data';
 import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button';
 
@@ -17,8 +17,44 @@ const fadeUp = {
 
 const explorations = [1, 2, 3, 4, 5];
 
+const projectThemeBySlug: Record<
+  string,
+  { panelBg: string; panelBorder: string; accent: string }
+> = {
+  'hydrate-ai': {
+    panelBg: '#111827',
+    panelBorder: '#334155',
+    accent: '#38bdf8'
+  },
+  'finflex-ai-flexy-ai': {
+    panelBg: '#1b140f',
+    panelBorder: '#3f2a1c',
+    accent: '#f97316'
+  },
+  resortops: {
+    panelBg: '#111415',
+    panelBorder: '#2b3235',
+    accent: '#fda4af'
+  },
+  'yield-enhancer': {
+    panelBg: '#131429',
+    panelBorder: '#2f3154',
+    accent: '#60a5fa'
+  },
+  fleetops: {
+    panelBg: '#121911',
+    panelBorder: '#294329',
+    accent: '#22c55e'
+  }
+};
+
 function CaseStudyCard({ project, index }: { project: CaseStudy; index: number }) {
   const ref = useRef<HTMLElement | null>(null);
+  const theme = projectThemeBySlug[project.slug] ?? {
+    panelBg: '#151517',
+    panelBorder: '#27272a',
+    accent: '#a1a1aa'
+  };
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'start start']
@@ -29,12 +65,34 @@ function CaseStudyCard({ project, index }: { project: CaseStudy; index: number }
   return (
     <motion.article ref={ref} className="stacking-card" style={{ zIndex: index + 1, scale }}>
       <Link href={`/work/${project.slug}`} className="project-card">
-        <div className="project-visual">
-          <div className="case-video case-video-fallback" />
-          <div className="project-overlay" />
+        <div
+          className="project-layout"
+          style={
+            {
+              '--project-panel-bg': theme.panelBg,
+              '--project-panel-border': theme.panelBorder,
+              '--project-accent': theme.accent
+            } as CSSProperties
+          }
+        >
           <div className="project-content">
             <h3 className="project-title">{project.title}</h3>
             <p className="project-description">{project.description}</p>
+          </div>
+          <div className="project-visual">
+            <div className="case-video case-video-fallback" />
+            {project.thumbnail ? (
+              <img
+                src={project.thumbnail}
+                alt={`${project.title} thumbnail`}
+                className="case-video"
+                loading="lazy"
+                onError={(event) => {
+                  event.currentTarget.style.display = 'none';
+                }}
+              />
+            ) : null}
+            <div className="project-overlay" />
           </div>
         </div>
       </Link>
@@ -47,24 +105,20 @@ export default function HomePage() {
     <main id="main-content">
       <section id="hero" className="hero-shell">
         <div className="hero-video">
-          <iframe
-            src="https://player.vimeo.com/video/1154950312?background=1&autoplay=1&loop=1&muted=1"
-            frameBorder="0"
-            allow="autoplay; fullscreen"
-            allowFullScreen
-            title="Hero Vimeo Background"
-          />
+          <video autoPlay muted loop playsInline preload="auto" aria-label="Hero Showreel Background">
+            <source src="/NewShowReel.mp4" type="video/mp4" />
+          </video>
         </div>
         <div className="hero-overlay" aria-hidden="true" />
 
         <div className="hero-content">
           <motion.h1 variants={fadeUp} initial="hidden" animate="visible" className="hero-headline">
             <motion.span variants={fadeUp} initial="hidden" animate="visible">
-              Designing AI-First
+              Product Designer designing AI interactions
             </motion.span>
             <br />
             <motion.span variants={fadeUp} initial="hidden" animate="visible" transition={{ delay: 0.1 }}>
-              Product Systems
+              and thinking beyond the happy path
             </motion.span>
           </motion.h1>
 
@@ -85,7 +139,9 @@ export default function HomePage() {
             transition={{ delay: 0.35 }}
             className="hero-role"
           >
-            Product Designer
+            Worked as a UX Designer for 1 year at Credain, designing fintech workflows and complex product systems.
+            <br />
+            Currently being mentored by UX Anudeep while exploring AI product design and edge-case driven interaction thinking.
           </motion.div>
 
           <motion.div
@@ -97,7 +153,25 @@ export default function HomePage() {
           >
             <button
               type="button"
-              className="contact-uiverse-btn"
+              className="pill-contact-button"
+              onClick={() => {
+                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              <div>
+                <div>
+                  <div>Contact Me</div>
+                </div>
+              </div>
+            </button>
+
+            {/* Backup legacy CTA: keep hidden unless needed */}
+            <button
+              type="button"
+              className="contact-uiverse-btn hidden"
+              aria-hidden="true"
+              tabIndex={-1}
+              style={{ display: 'none' }}
               onClick={() => {
                 document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
               }}
@@ -138,12 +212,16 @@ export default function HomePage() {
               </div>
             </button>
 
+            {/* Backup resume CTA: keep hidden unless needed */}
             <InteractiveHoverButton
               text="Resume"
-              className="!h-[60px] !w-[220px] text-white text-base font-semibold whitespace-nowrap"
+              className="hidden !h-[60px] !w-[220px] text-white text-[18px] font-bold whitespace-nowrap"
               onClick={() => {
                 window.location.href = '/resume.pdf';
               }}
+              aria-hidden="true"
+              tabIndex={-1}
+              style={{ display: 'none' }}
             />
           </motion.div>
         </div>

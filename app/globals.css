@@ -85,13 +85,22 @@ p {
   pointer-events: none;
 }
 
+.hero-video video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
 .hero-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.55);
   z-index: 1;
   pointer-events: none;
 }
@@ -129,8 +138,8 @@ p {
 
 .hero-role {
   margin-top: 6px;
-  font-size: 20px;
-  color: #a1a1aa;
+  font-size: 22px;
+  color: #e4e4e7;
 }
 
 .hero-buttons {
@@ -143,9 +152,9 @@ p {
 
 .stacking-card {
   position: sticky;
-  top: 0;
+  top: 16vh;
   width: 100vw;
-  height: 100vh;
+  height: 52vh;
   overflow: hidden;
   margin-left: calc(50% - 50vw);
   transform-origin: center top;
@@ -158,8 +167,22 @@ p {
 .project-card {
   display: block;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
+  border-radius: 28px;
+}
+
+.project-layout {
+  display: grid;
+  grid-template-columns: minmax(360px, 48%) minmax(0, 52%);
+  width: 100%;
+  height: 100%;
+  border: 1px solid #27272a;
+  background: #0f0f10;
+  border-radius: inherit;
+  overflow: hidden;
+  position: relative;
+  transition: filter 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
 }
 
 .project-visual {
@@ -167,9 +190,7 @@ p {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 80% 20%, rgba(249, 115, 22, 0.25), transparent 36%),
-    linear-gradient(145deg, #18181b 0%, #09090b 100%);
+  background: #09090b;
 }
 
 .case-video {
@@ -178,6 +199,7 @@ p {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 0;
 }
 
 .case-video-fallback {
@@ -193,34 +215,56 @@ p {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6));
+  background: rgba(0, 0, 0, 0.06);
 }
 
 .project-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
+  position: relative;
   z-index: 3;
-  max-width: 800px;
-  width: calc(100% - 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: left;
+  padding: 48px;
+  background: var(--project-panel-bg, #151517);
+  border-right: 1px solid var(--project-panel-border, #27272a);
+  transition: filter 220ms ease;
 }
+
+.project-visual {
+  transition: filter 220ms ease;
+}
+
+.project-card:hover .project-layout {
+  border-color: color-mix(in srgb, var(--project-accent, #a1a1aa) 45%, #3f3f46 55%);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--project-accent, #a1a1aa) 40%, transparent 60%),
+    0 18px 40px rgba(0, 0, 0, 0.32);
+}
+
+.project-card:hover .project-content {
+  filter: brightness(1.13);
+}
+
+.project-card:hover .project-visual {
+  filter: brightness(1.08) saturate(1.08);
+}
+
 
 .project-title {
   margin: 0;
-  font-size: clamp(2.8rem, 7vw, 64px);
+  font-size: clamp(2rem, 4vw, 48px);
   font-weight: 600;
-  line-height: 1.05;
+  line-height: 1.1;
   color: #ffffff;
 }
 
 .project-description {
   margin-top: 14px;
-  font-size: 24px;
+  font-size: 20px;
   color: #e4e4e7;
-  max-width: 760px;
-  margin-inline: auto;
+  max-width: 620px;
 }
 
 .explorations {
@@ -326,6 +370,149 @@ p {
 
 .interactive-hover-button:hover .ihb-arrow {
   transform: translateX(4px);
+}
+
+/* Pill Contact CTA (new primary button) */
+.pill-contact-button {
+  --stone-50: #fafaf9;
+  --stone-800: #292524;
+  --yellow-400: #facc15;
+  font-family: "Rubik", sans-serif;
+  cursor: pointer;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  line-height: 1;
+  font-size: 1rem;
+  border-radius: 999px;
+  width: 220px;
+  height: 60px;
+  outline: 2px solid transparent;
+  outline-offset: 6px;
+  color: var(--stone-50);
+}
+
+.pill-contact-button:active {
+  outline-color: var(--yellow-400);
+}
+
+.pill-contact-button:focus-visible {
+  outline-color: var(--yellow-400);
+  outline-style: dashed;
+}
+
+.pill-contact-button::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  height: 200%;
+  max-height: 100px;
+  aspect-ratio: 1;
+  margin: auto;
+  background: #fff;
+  clip-path: polygon(100% 50%,91.48% 56.57%,97.55% 65.45%,87.42% 69.07%,90.45% 79.39%,79.7% 79.7%,79.39% 90.45%,69.07% 87.42%,65.45% 97.55%,56.57% 91.48%,50% 100%,43.43% 91.48%,34.55% 97.55%,30.93% 87.42%,20.61% 90.45%,20.3% 79.7%,9.55% 79.39%,12.58% 69.07%,2.45% 65.45%,8.52% 56.57%,0% 50%,8.52% 43.43%,2.45% 34.55%,12.58% 30.93%,9.55% 20.61%,20.3% 20.3%,20.61% 9.55%,30.93% 12.58%,34.55% 2.45%,43.43% 8.52%,50% 0%,56.57% 8.52%,65.45% 2.45%,69.07% 12.58%,79.39% 9.55%,79.7% 20.3%,90.45% 20.61%,87.42% 30.93%,97.55% 34.55%,91.48% 43.43%);
+  animation: pill-star-rotate 4s linear infinite;
+  opacity: 0.1;
+}
+
+.pill-contact-button:hover::before {
+  opacity: 1;
+}
+
+.pill-contact-button > div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 2px;
+  border-radius: 999px;
+  background-color: var(--yellow-400);
+  transform: translate(-4px, -4px);
+  transition: all 150ms ease;
+  box-shadow:
+    0.5px 0.5px 0 0 var(--yellow-400), 1px 1px 0 0 var(--yellow-400),
+    1.5px 1.5px 0 0 var(--yellow-400), 2px 2px 0 0 var(--yellow-400),
+    2.5px 2.5px 0 0 var(--yellow-400), 3px 3px 0 0 var(--yellow-400),
+    0 0 0 2px var(--stone-800), 0.5px 0.5px 0 2px var(--stone-800),
+    1px 1px 0 2px var(--stone-800), 1.5px 1.5px 0 2px var(--stone-800),
+    2px 2px 0 2px var(--stone-800), 2.5px 2.5px 0 2px var(--stone-800),
+    3px 3px 0 2px var(--stone-800), 3.5px 3.5px 0 2px var(--stone-800),
+    4px 4px 0 2px var(--stone-800), 0 0 0 4px var(--stone-50),
+    0.5px 0.5px 0 4px var(--stone-50), 1px 1px 0 4px var(--stone-50),
+    1.5px 1.5px 0 4px var(--stone-50), 2px 2px 0 4px var(--stone-50),
+    2.5px 2.5px 0 4px var(--stone-50), 3px 3px 0 4px var(--stone-50),
+    3.5px 3.5px 0 4px var(--stone-50), 4px 4px 0 4px var(--stone-50);
+}
+
+.pill-contact-button:hover > div {
+  transform: translate(0, 0);
+  box-shadow:
+    0 0 0 0 var(--yellow-400), 0 0 0 0 var(--yellow-400), 0 0 0 0 var(--yellow-400),
+    0 0 0 0 var(--yellow-400), 0 0 0 0 var(--yellow-400), 0 0 0 0 var(--yellow-400),
+    0 0 0 2px var(--stone-800), 0 0 0 2px var(--stone-800), 0 0 0 2px var(--stone-800),
+    0 0 0 2px var(--stone-800), 0 0 0 2px var(--stone-800), 0 0 0 2px var(--stone-800),
+    0 0 0 2px var(--stone-800), 0 0 0 2px var(--stone-800), 0 0 0 2px var(--stone-800),
+    0 0 0 4px var(--stone-50), 0 0 0 4px var(--stone-50), 0 0 0 4px var(--stone-50),
+    0 0 0 4px var(--stone-50), 0 0 0 4px var(--stone-50), 0 0 0 4px var(--stone-50),
+    0 0 0 4px var(--stone-50), 0 0 0 4px var(--stone-50), 0 0 0 4px var(--stone-50);
+}
+
+.pill-contact-button > div > div {
+  position: relative;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background-color: var(--stone-800);
+}
+
+.pill-contact-button > div > div::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  opacity: 0.1;
+  background-image: radial-gradient(rgb(255 255 255 / 80%) 20%, transparent 20%),
+    radial-gradient(rgb(255 255 255 / 100%) 20%, transparent 20%);
+  background-position: 0 0, 4px 4px;
+  background-size: 8px 8px;
+  mix-blend-mode: hard-light;
+  box-shadow: inset 0 0 0 1px var(--stone-800);
+  animation: pill-dots 0.4s infinite linear;
+}
+
+.pill-contact-button > div > div > div {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  gap: 0.25rem;
+  filter: drop-shadow(0 -1px 0 var(--stone-800));
+}
+
+.pill-contact-button > div > div > div:hover {
+  filter: drop-shadow(0 -1px 0 rgba(255, 255, 255, 0.1));
+}
+
+.pill-contact-button > div > div > div:active {
+  transform: translateY(2px);
+}
+
+@keyframes pill-star-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pill-dots {
+  0% { background-position: 0 0, 4px 4px; }
+  100% { background-position: 8px 0, 12px 4px; }
 }
 
 /* From Uiverse.io by MuhammadHasann (scoped) */
@@ -533,13 +720,25 @@ p {
     font-size: 17px;
   }
 
-  .project-title {
-    font-size: clamp(2.2rem, 9vw, 3.2rem);
+  .stacking-card {
+    top: 11vh;
+    height: 62vh;
   }
 
-  .project-description {
-    font-size: 18px;
+  .project-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
   }
+
+  .project-content {
+    padding: 24px;
+    border-right: 0;
+    border-bottom: 1px solid #27272a;
+  }
+
+  .project-title { font-size: clamp(1.8rem, 7vw, 2.7rem); }
+
+  .project-description { font-size: 17px; }
 
   .exploration-card {
     width: 88vw;
