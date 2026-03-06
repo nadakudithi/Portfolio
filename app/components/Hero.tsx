@@ -1,48 +1,68 @@
+'use client';
+
+import { motion } from 'framer-motion';
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: 'easeOut' as const }
+  }
+};
+
 export function Hero() {
   return (
-    <section id="hero" className="min-h-[80vh] pt-[120px] pb-[120px]">
-      <div className="mx-auto grid max-w-container gap-12 px-6 md:grid-cols-2 md:items-center">
-        <div>
-          <p className="text-sm font-medium uppercase tracking-[0.12em] text-secondary">Sri Harsha NMRS</p>
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">UX Designer</h1>
-          <div className="mt-8 max-w-reading space-y-5 text-[1.02rem] text-secondary">
-            <p>
-              UX Designer with 1.6+ years of experience designing complex digital products across fintech and
-              multi-product ecosystems.
-            </p>
-            <p>
-              My work focuses on interaction clarity, edge-case analysis, and building resilient user flows in
-              high-stakes environments.
-            </p>
-            <p>
-              Alongside production experience, I actively design AI-driven and behavior-aware systems, exploring
-              agentic flows, adaptive interfaces, and decision-based interaction models.
-            </p>
-            <p>
-              I approach every problem by stress-testing beyond the happy path, identifying where systems may fail,
-              and refining them until they hold.
-            </p>
-            <p>
-              I&apos;m seeking to contribute to AI-first product teams where structured thinking, experimentation, and
-              system-level design are core to the product.
-            </p>
-          </div>
+    <section id="hero" className="hero-shell">
+      <div className="hero-video">
+        <video autoPlay muted loop playsInline preload="auto" aria-label="Hero Showreel Background">
+          <source src="/NewShowReel.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div className="hero-overlay" aria-hidden="true" />
 
-          <div className="mt-10 flex flex-wrap gap-4">
-            <a className="btn-primary" href="#work">
-              View Work
-            </a>
-            <a className="btn-secondary" href="#">
-              Resume
-            </a>
-          </div>
-        </div>
+      <div className="hero-content">
+        <motion.h1 variants={fadeUp} initial="hidden" animate="visible" className="hero-headline">
+          <motion.span variants={fadeUp} initial="hidden" animate="visible">
+            Product Designer designing AI interactions
+          </motion.span>
+          <br />
+          <motion.span variants={fadeUp} initial="hidden" animate="visible" transition={{ delay: 0.1 }}>
+            and thinking beyond the happy path
+          </motion.span>
+        </motion.h1>
 
-        <div className="hero-visual-container">
-          <div className="hero-visual" aria-label="Custom HTML embed container for hero visual">
-            {/* custom HTML animation will be pasted here */}
-          </div>
-        </div>
+        <motion.div variants={fadeUp} initial="hidden" animate="visible" transition={{ delay: 0.25 }} className="hero-name">
+          Sri Harsha NMRS
+        </motion.div>
+
+        <motion.div variants={fadeUp} initial="hidden" animate="visible" transition={{ delay: 0.35 }} className="hero-role">
+          Worked as a UX Designer for 1 year at Credain, designing fintech workflows and complex product systems.
+          <br />
+          Currently being mentored by UX Anudeep while exploring AI product design and edge-case driven interaction thinking.
+        </motion.div>
+
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          transition={{ delay: 0.5 }}
+          className="relative z-[60] mt-10 flex items-center justify-center gap-6 pointer-events-auto"
+        >
+          <button
+            type="button"
+            className="pill-contact-button"
+            onClick={() => {
+              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
+            <div>
+              <div>
+                <div>Contact Me</div>
+              </div>
+            </div>
+          </button>
+        </motion.div>
       </div>
     </section>
   );
