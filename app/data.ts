@@ -33,7 +33,7 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: 'fleetops',
     title: 'BigBasket',
-    description: 'Improving Average Order Value By Imporving Combo Availability And Discoverability',
+    description: 'Improving Average Order Value By Imporving Combo Availability And Discoverability.',
     thumbnail: '/work-thumbnails/Bigbasket%20Banner.png'
   }
 ];
