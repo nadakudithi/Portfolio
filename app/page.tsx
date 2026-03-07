@@ -15,7 +15,50 @@ const fadeUp = {
   }
 };
 
-const explorations = [1, 2, 3, 4, 5];
+const explorations = [
+  {
+    id: 'whale-shader',
+    gif: '/explorations/Whale%20Shader.opt.gif',
+    alt: 'Whale shader exploration',
+    size: 'hero',
+    layout: 'a'
+  },
+  {
+    id: 'goku-rive',
+    gif: '/explorations/Goku%20Rive.opt.gif',
+    alt: 'Goku animation exploration',
+    size: 'square',
+    layout: 'b'
+  },
+  {
+    id: 'cube-shader',
+    gif: '/explorations/Cube%20Shader.opt.gif',
+    alt: 'Cube shader exploration',
+    size: 'tall',
+    layout: 'd'
+  },
+  {
+    id: 'bottle-shader',
+    gif: '/explorations/Bottle%20Shader.opt.gif',
+    alt: 'Bottle shader exploration',
+    size: 'wide',
+    layout: 'c'
+  },
+  {
+    id: 'man-shader',
+    gif: '/explorations/Man%20Shader.opt.gif',
+    alt: 'Man shader exploration',
+    size: 'square',
+    layout: 'e'
+  },
+  {
+    id: 'spongebob-gif',
+    gif: '/explorations/Spongebob%20Gif.opt.gif',
+    alt: 'Spongebob gif exploration',
+    size: 'wide',
+    layout: 'f'
+  }
+];
 
 const projectThemeBySlug: Record<
   string,
@@ -238,25 +281,23 @@ export default function HomePage() {
       <section id="explorations" className="cinematic-section explorations">
         <div className="section-shell">
           <h2 className="section-title">Explorations</h2>
-          <p className="section-subtitle">Small interaction experiments exploring AI and motion.</p>
+          <p className="section-subtitle">I love to explore during my free time.</p>
         </div>
-        <div className="exploration-loop-wrap">
-          <div className="exploration-track">
-            {[...explorations, ...explorations].map((item, index) => (
-              <article key={`${item}-${index}`} className="exploration-card">
-                {index % explorations.length === 0 ? (
-                  <img
-                    src="/explorations/Goku%20Rive.gif"
-                    alt="Animated character exploration"
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
-                ) : (
-                  <video autoPlay loop muted playsInline />
-                )}
-              </article>
-            ))}
-          </div>
+        <div className="exploration-bento">
+          {explorations.map((item) => (
+            <article
+              key={item.id}
+              className={`exploration-tile exploration-tile-${item.size} exploration-layout-${item.layout}`}
+            >
+              <img
+                src={item.gif}
+                alt={item.alt}
+                className="exploration-tile-media"
+                loading="lazy"
+                decoding="async"
+              />
+            </article>
+          ))}
         </div>
       </section>
 
