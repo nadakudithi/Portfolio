@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { type CSSProperties, useRef } from 'react';
+import { motion, useMotionValue, useScroll, useTransform } from 'framer-motion';
+import { type CSSProperties, useEffect, useRef, useState } from 'react';
 import { caseStudies, type CaseStudy } from '@/app/data';
 import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button';
 
@@ -15,7 +15,13 @@ const fadeUp = {
   }
 };
 
-const explorations = [1, 2, 3, 4, 5];
+const explorations = [
+  { id: 'goku-rive', gif: '/explorations/Goku%20Rive.gif', alt: 'Goku animation exploration' },
+  { id: 'exp-2' },
+  { id: 'exp-3' },
+  { id: 'exp-4' },
+  { id: 'exp-5' }
+];
 
 const projectThemeBySlug: Record<
   string,
@@ -97,6 +103,116 @@ function CaseStudyCard({ project, index }: { project: CaseStudy; index: number }
         </div>
       </Link>
     </motion.article>
+  );
+}
+
+function ExplorationCarousel() {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const offsetX = useMotionValue(0);
+  const [segmentWidth, setSegmentWidth] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    const updateLoopWidth = () => {
+      if (!trackRef.current) {
+        return;
+      }
+      const width = trackRef.current.scrollWidth / 3;
+      setSegmentWidth(width);
+      if (offsetX.get() === 0) {
+        offsetX.set(-width);
+      }
+    };
+
+    updateLoopWidth();
+    window.addEventListener('resize', updateLoopWidth);
+
+    return () => {
+      window.removeEventListener('resize', updateLoopWidth);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!segmentWidth) {
+      return;
+    }
+
+    let rafId = 0;
+    const speed = 0.55;
+
+    const animate = () => {
+      if (!isPaused && !isDragging) {
+        const next = offsetX.get() - speed;
+        if (next <= -2 * segmentWidth) {
+          offsetX.set(next + segmentWidth);
+        } else if (next > 0) {
+          offsetX.set(next - segmentWidth);
+        } else {
+          offsetX.set(next);
+        }
+      }
+      rafId = window.requestAnimationFrame(animate);
+    };
+
+    rafId = window.requestAnimationFrame(animate);
+    return () => {
+      window.cancelAnimationFrame(rafId);
+    };
+  }, [isDragging, isPaused, segmentWidth, offsetX]);
+
+  const normalizeOffset = () => {
+    if (!segmentWidth) {
+      return;
+    }
+
+    let current = offsetX.get();
+    while (current <= -2 * segmentWidth) {
+      current += segmentWidth;
+    }
+    while (current > 0) {
+      current -= segmentWidth;
+    }
+    offsetX.set(current);
+  };
+
+  return (
+    <div
+      className="exploration-loop-wrap"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => {
+        setIsPaused(false);
+        normalizeOffset();
+      }}
+    >
+      <motion.div
+        ref={trackRef}
+        className="exploration-track"
+        style={{ x: offsetX }}
+        drag="x"
+        dragElastic={0.03}
+        dragMomentum={false}
+        onDragStart={() => {
+          setIsDragging(true);
+          setIsPaused(true);
+        }}
+        onDragEnd={() => {
+          setIsDragging(false);
+          setIsPaused(false);
+          normalizeOffset();
+        }}
+      >
+        {[...explorations, ...explorations, ...explorations].map((item, index) => (
+          <article key={`${item.id}-${index}`} className="exploration-card">
+            {item.gif ? (
+              <img src={item.gif} alt={item.alt} className="exploration-gif" loading="lazy" />
+            ) : (
+              <video autoPlay loop muted playsInline />
+            )}
+          </article>
+        ))}
+      </motion.div>
+    </div>
   );
 }
 
@@ -240,24 +356,7 @@ export default function HomePage() {
           <h2 className="section-title">Explorations</h2>
           <p className="section-subtitle">Small interaction experiments exploring AI and motion.</p>
         </div>
-        <div className="exploration-loop-wrap">
-          <div className="exploration-track">
-            {[...explorations, ...explorations].map((item, index) => (
-              <article key={`${item}-${index}`} className="exploration-card">
-                {index % explorations.length === 0 ? (
-                  <img
-                    src="/explorations/Goku%20Rive.gif"
-                    alt="Animated character exploration"
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
-                ) : (
-                  <video autoPlay loop muted playsInline />
-                )}
-              </article>
-            ))}
-          </div>
-        </div>
+        <ExplorationCarousel />
       </section>
 
       <section id="about" className="cinematic-section">

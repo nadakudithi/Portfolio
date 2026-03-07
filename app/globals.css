@@ -284,17 +284,20 @@ p {
   display: flex;
   gap: 40px;
   width: max-content;
-  animation: scrollVideos 40s linear infinite;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  will-change: transform;
 }
 
-.exploration-track:hover {
-  animation-play-state: paused;
+.exploration-track:active {
+  cursor: grabbing;
 }
 
 .exploration-card {
   position: relative;
-  width: 720px;
-  height: 420px;
+  width: 620px;
+  height: 360px;
   overflow: hidden;
   border-radius: 18px;
   border: 1px solid #27272a;
@@ -308,6 +311,15 @@ p {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.exploration-gif {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.22);
+  transform-origin: center;
+  object-position: center 46%;
 }
 
 .shimmer-button {
@@ -745,8 +757,8 @@ p {
   .project-description { font-size: 17px; }
 
   .exploration-card {
-    width: 88vw;
-    height: 52vw;
+    width: 80vw;
+    height: 47vw;
     min-height: 240px;
   }
 
